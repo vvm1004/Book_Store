@@ -12,23 +12,25 @@ import LoginPage from 'pages/client/auth/login';
 import RegisterPage from 'pages/client/auth/register';
 import 'styles/global.scss'
 import HomePage from 'pages/client/home';
+import { App } from 'antd';
+
 const router = createBrowserRouter([
   {
-    
+
     path: "/",
     element: <Layout />,
     children: [
       {
         index: true,
-        element: <HomePage/>,
+        element: <HomePage />,
       },
       {
         path: "/book",
-        element: <BookPage/>,
+        element: <BookPage />,
       },
       {
         path: "/about",
-        element: <AboutPage/>,
+        element: <AboutPage />,
       },
     ]
   },
@@ -40,12 +42,13 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterPage />,
   },
-  
+
 ]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* <Layout /> */}
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+    <App>
+      <RouterProvider router={router} />
+    </App>
+  </StrictMode>
+);
