@@ -1,11 +1,19 @@
 import axios from 'services/axios.customize';
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const loginAPI = (username: string, password: string) => {
+export const loginAPI = async (username: string, password: string) => {
   const urlBackend = "/api/v1/auth/login";
-  return axios.post<IBackendRes<ILogin>>(urlBackend, {
-    username,
-    password,
-  });
+     await delay(3000);
+
+  return axios.post<IBackendRes<ILogin>>(
+    urlBackend,
+    { username, password },
+    // {
+    //   headers: {
+    //     delay: 3000,
+    //   },
+    // }
+  );
 };
 
 export const registerAPI = (fullName: string, email:string,  password: string, phone: string) => {
@@ -18,3 +26,21 @@ export const registerAPI = (fullName: string, email:string,  password: string, p
   });
 };
 
+
+export const fetchAccountAPI = async() => {
+  // const urlBackend = "/api/v1/auth/account";
+  // return axios.get<IBackendRes<IFetchAccount>>(urlBackend,
+  //   {
+  //     headers: {
+  //       delay: 3000,
+  //     },
+  //   })
+   await delay(1000);
+  const urlBackend = "/api/v1/auth/account";
+  return axios.get<IBackendRes<IFetchAccount>>(urlBackend);
+}
+
+export const logoutAPI = () => {
+  const urlBackend = "/api/v1/auth/logout";
+  return axios.post<IBackendRes<IRegister>>(urlBackend);
+};

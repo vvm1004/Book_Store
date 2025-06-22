@@ -1,15 +1,15 @@
-import { Outlet } from "react-router-dom"
-import AppHeader from "./components/layout/app.header"
-
+import { Outlet } from "react-router-dom";
+import AppHeader from "./components/layout/app.header";
+import { useState } from "react";
 
 function Layout() {
 
   return (
-    <>
-      <AppHeader/>
-      <Outlet />
-    </>
-  )
+    <div>
+      <AppHeader />
+      <Outlet  />
+    </div>
+  );
 }
 
-export default Layout
+export default Layout;
