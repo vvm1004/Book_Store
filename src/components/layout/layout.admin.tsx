@@ -159,7 +159,7 @@ const LayoutAdmin = () => {
             <Outlet />
           </Content>
           <Footer style={{ padding: 0, textAlign: "center" }}>
-            React Test Fresher &copy; Hỏi Dân IT - Made with <HeartTwoTone />
+            BookStore &copy; @vvm1004 <HeartTwoTone />
           </Footer>
         </Layout>
       </Layout>
