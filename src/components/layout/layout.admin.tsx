@@ -1,29 +1,73 @@
-import React, { useState } from "react";
+import { logoutAPI } from "@/services/api";
 import {
   AppstoreOutlined,
+  DollarCircleOutlined,
   ExceptionOutlined,
   HeartTwoTone,
-  TeamOutlined,
-  UserOutlined,
-  DollarCircleOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  TeamOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Dropdown, Space, Avatar } from "antd";
-import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
-import type { MenuProps } from "antd";
+import { Avatar, Dropdown, Layout, Menu, Space } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useCurrentApp } from "../context/app.context";
-import { logoutAPI } from "@/services/api";
-type MenuItem = Required<MenuProps>["items"][number];
 
 const { Content, Footer, Sider } = Layout;
 
 const LayoutAdmin = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [activeMenu, setActiveMenu] = useState<string>("");
   const { isAuthenticated, user, setUser, setIsAuthenticated } =
     useCurrentApp();
+
+  const location = useLocation();
+
+  const items = useMemo(() => {
+    return [
+      {
+        label: <Link to="/admin">Dashboard</Link>,
+        key: "/admin",
+        icon: <AppstoreOutlined />,
+      },
+      {
+        label: <span>Manage Users</span>,
+        key: "/admin/user",
+        icon: <UserOutlined />,
+        children: [
+          {
+            label: <Link to="/admin/user">CRUD</Link>,
+            key: "/admin/user",
+            icon: <TeamOutlined />,
+          },
+        ],
+      },
+      {
+        label: <Link to="/admin/book">Manage Books</Link>,
+        key: "/admin/book",
+        icon: <ExceptionOutlined />,
+      },
+      {
+        label: <Link to="/admin/order">Manage Orders</Link>,
+        key: "/admin/order",
+        icon: <DollarCircleOutlined />,
+      },
+    ];
+  }, []);
+
+  useEffect(() => {
+    console.log(location.pathname);
+
+    if (items && items.length > 0) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].key === location.pathname) {
+          setActiveMenu(items[i].key);
+          return;
+        }
+      }
+    }
+  }, [location, items]);
 
   const handleLogout = async () => {
     const res = await logoutAPI();
@@ -33,41 +77,6 @@ const LayoutAdmin = () => {
       localStorage.removeItem("access_token");
     }
   };
-
-  const items: MenuItem[] = [
-    {
-      label: <Link to="/admin">Dashboard</Link>,
-      key: "dashboard",
-      icon: <AppstoreOutlined />,
-    },
-    {
-      label: <span>Manage Users</span>,
-      key: "user",
-      icon: <UserOutlined />,
-      children: [
-        {
-          label: <Link to="/admin/user">CRUD</Link>,
-          key: "crud",
-          icon: <TeamOutlined />,
-        },
-        // {
-        //     label: 'Files1',
-        //     key: 'file1',
-        //     icon: <TeamOutlined />,
-        // }
-      ],
-    },
-    {
-      label: <Link to="/admin/book">Manage Books</Link>,
-      key: "book",
-      icon: <ExceptionOutlined />,
-    },
-    {
-      label: <Link to="/admin/order">Manage Orders</Link>,
-      key: "order",
-      icon: <DollarCircleOutlined />,
-    },
-  ];
 
   const itemsDropdown = [
     {
@@ -108,6 +117,7 @@ const LayoutAdmin = () => {
     }
   }
 
+  console.log("activeMenu", activeMenu);
   return (
     <>
       <Layout style={{ minHeight: "100vh" }} className="layout-admin">
@@ -122,6 +132,7 @@ const LayoutAdmin = () => {
           </div>
           <Menu
             defaultSelectedKeys={[activeMenu]}
+            selectedKeys={[activeMenu]}
             mode="inline"
             items={items}
             onClick={(e) => setActiveMenu(e.key)}
@@ -159,7 +170,7 @@ const LayoutAdmin = () => {
             <Outlet />
           </Content>
           <Footer style={{ padding: 0, textAlign: "center" }}>
-            BookStore &copy; @vvm1004 <HeartTwoTone />
+            BookStore &copy; vvm1004 - Made with <HeartTwoTone />
           </Footer>
         </Layout>
       </Layout>

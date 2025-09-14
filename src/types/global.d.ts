@@ -20,20 +20,13 @@ declare global {
 
   interface ILogin {
     access_token: string;
-    user: {
-      email: string;
-      phone: string;
-      fullName: string;
-      role: string;
-      avatar: string;
-      id: string;
-    };
+    user: IUser;
   }
 
   interface IRegister {
-    _id: string;
     email: string;
     fullName: string;
+    _id: string;
   }
 
   interface IUser {
@@ -43,6 +36,7 @@ declare global {
     role: string;
     avatar: string;
     id: string;
+    role: string;
   }
 
   interface IFetchAccount {
@@ -61,10 +55,16 @@ declare global {
     updatedAt: Date;
   }
 
-  interface IResponseImport {
+  interface IBulkCreateUserRequest {
+    fullName: string;
+    password: string;
+    email: string;
+    phone: string;
+  }
+
+  interface IBulkCreateUserResponse {
     countSuccess: number;
     countError: number;
-    detail: any;
   }
 
   interface IBookTable {
@@ -81,13 +81,40 @@ declare global {
     updatedAt: Date;
   }
 
-  interface ICart {
-    _id: string;
-    quantity: number;
-    detail: IBookTable;
+  interface IBookData {
+    thumbnail?: string;
+    slider?: string[];
+    mainText?: string;
+    author?: string;
+    price?: number;
+    quantity?: number;
+    category?: string;
   }
 
-  interface IHistory {
+  interface IFileUploadResponse {
+    fileUploaded: string;
+  }
+
+  interface ICartData {
+    detail: IBookTable;
+    quantity: number;
+    _id: string;
+  }
+
+  interface ICartRequest {
+    address?: string;
+    name?: string;
+    phone?: string;
+    totalPrice?: number;
+    type?: string;
+    detail?: {
+      _id?: string;
+      quantity?: number;
+      bookName?: string;
+    }[];
+  }
+
+  interface IHistoryTable {
     _id: string;
     name: string;
     type: string;
@@ -95,14 +122,21 @@ declare global {
     phone: string;
     userId: string;
     detail: {
-      bookName: string;
-      quantity: number;
       _id: string;
+      quantity: number;
+      bookName: string;
     }[];
     totalPrice: number;
-    createdAt: Date;
-    updatedAt: Date;
+    paymentStatus: string;
+    paymentRef: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: 0;
   }
 
-   interface IOrderTable extends IHistory {}
+  interface IDashBoard {
+    countUser: number;
+    countOrder: number;
+    countBook: number;
+  }
 }

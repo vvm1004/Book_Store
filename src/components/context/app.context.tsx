@@ -1,4 +1,5 @@
 import { fetchAccountAPI } from "@/services/api";
+import { getCartsLocalStorage } from "@/services/book.service";
 import { createContext, useContext, useEffect, useState } from "react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
@@ -9,6 +10,8 @@ interface IAppContext {
   user: IUser | null;
   isAppLoading: boolean;
   setIsAppLoading: (v: boolean) => void;
+  carts: ICartData[];
+  setCarts: (v: ICartData[]) => void;
 }
 
 const CurrentAppContext = createContext<IAppContext | null>(null);
@@ -21,6 +24,7 @@ export const AppProvider = (props: TProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<IUser | null>(null);
   const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
+  const [carts, setCarts] = useState<ICartData[]>([]);
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -33,6 +37,12 @@ export const AppProvider = (props: TProps) => {
     };
 
     fetchAccount();
+
+    const cartsDataLocalStorage: ICartData[] = getCartsLocalStorage();
+
+    if (cartsDataLocalStorage) {
+      setCarts(cartsDataLocalStorage);
+    }
   }, []);
 
   return (
@@ -46,6 +56,8 @@ export const AppProvider = (props: TProps) => {
             setUser,
             isAppLoading,
             setIsAppLoading,
+            carts,
+            setCarts,
           }}
         >
           {props.children}

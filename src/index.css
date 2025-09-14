@@ -1,0 +1,3 @@
+/* @tailwind base; */ /* Cần phải comment dòng này lại để không lỗi scss trước đó */
+@tailwind components;
+@tailwind utilities;
